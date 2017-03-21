@@ -1,21 +1,19 @@
 // soundtest.cpp : Defines the entry point for the console application.
 //test if it can even play wav files
+#ifndef __linux__ 
+	#include <windows.h>
+#endif
+
 #include <string>
 #include <map> 
 #include "bass.h" //look at documentation for fucks sake http://stackoverflow.com/questions/7180920/bass-play-a-stream
-#include <thread>
 #include <iostream>
 #include <stdio.h> //provides funciton _getch(void) which can be used to read keystroke without echoing them. 
-#ifdef _WIN32
-	#include <mmsystem.h>
-	#include "stdafx.h"
-	#include <windows.h>
-	#include <memory.h>
-    #include <conio.h>
-#endif
-using namespace std;
+#include <memory.h>
+#include <conio.h>
 
-void playwav(string filename) {
+using namespace std;
+void playwav(std::string filename) {
 	int device = -1;
 	int freq = 44100;
 	const void* file = filename.c_str();
@@ -51,14 +49,14 @@ std::map <string, string> getfilename(){
 };
 int main()
 {	
-	std :: map <string, string> roar = getfilename();
-	input* ptoin1; 
-	ptoin1 = &input1; 
+	std::map <string, string> roar = getfilename();
+	input* ptoin1;
+	ptoin1 = &input1;
 	int i = 0;
 	while (1) {
 		input1.button = _getch(); cout << input1.button;
 		input1.strum = _getch(); cout << input1.strum;
-		char concatonated[] =  {input1.button, input1.strum, '\0'};
+		char concatonated[] = { input1.button, input1.strum, '\0' };
 		string combo = string(concatonated);
 		playwav(roar[combo]);
 	}
