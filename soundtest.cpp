@@ -1,11 +1,9 @@
 // soundtest.cpp : Defines the entry point for the console application.
-//test if it can even play wav files
-#ifndef __linux__ 
-	#include <windows.h>
-	#include <Xinput.h> //https://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
-	#include <WinBase.h>
-#endif
 
+//Includes
+#include <windows.h>
+#include <Xinput.h> //https://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
+#include <WinBase.h>
 #include <string>
 #include <map> 
 #include "bass.h" //look at documentation for fucks sake http://stackoverflow.com/questions/7180920/bass-play-a-stream
@@ -15,49 +13,48 @@
 #include <conio.h>
 
 using namespace std;
-void LED();
-std::map <WORD, string> getfilename();
-void playwav(std::string filename); 
 
+//Constructors
+void LED(); //44
+std::map <WORD, string> getfilename(); //64
+void playwav(std::string filename); //76
+
+//Main Loop
 int main()
 {
 	_XINPUT_GAMEPAD gamepad; DWORD dwResult; XINPUT_STATE state; //declare state object from xinput_state struct
 	ZeroMemory(&state, sizeof(XINPUT_STATE)); //finding memory location of zero memory
 	std::map <WORD, string> roar = getfilename();
-	WORD wammy = 0x0; 
-	while (1) {
+	WORD wammy = 0x0;
+	while (1) 
+	{
 		LED();
 		dwResult = XInputGetState(0, &state);
 		if (state.Gamepad.sThumbRX >= 0)
 			wammy = 0x0020;
 		else
 			wammy = 0x0;
- //now we have new information. Wammy bar goes from -32768 (-0x8000) to 32767 (0x8000); member SHORT sThumbRX of struct Gamepad;
+		//now we have new information. Wammy bar goes from -32768 (-0x8000) to 32767 (0x8000); member SHORT sThumbRX of struct Gamepad;
 		cout << state.Gamepad.wButtons + wammy << endl;
 		Sleep(100);
 		playwav(roar[state.Gamepad.wButtons + wammy]);
 		;
 	}
-return 0;
+	return 0;
 }
 
+//Functions
 void LED() {
 	_XINPUT_GAMEPAD gamepad;
-	DWORD dwResult;
-
-	XINPUT_STATE state; //declare state object from xinput_state struct
+	DWORD dwResult; XINPUT_STATE state; //declare state object from xinput_state struct
 	ZeroMemory(&state, sizeof(XINPUT_STATE)); //finding memory location of zero memory
-
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
 		XINPUT_STATE state;
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
 		// Simply get the state of the controller from XInput.
 		dwResult = XInputGetState(i, &state);
-		//	if (dwResult == ERROR_SUCCESS)
-		//	else
-		//cout << "Controller is not connected" << endl;
-	}// need to implement this for more wav file functionality 
+	}
 
 }
 
@@ -73,7 +70,7 @@ std::map <WORD, string> getfilename() {
 	return wavfile;
 };
 
-void playwav(std::string filename){
+void playwav(std::string filename) {
 	int device = -1;
 	int freq = 44100;
 	const void* file = filename.c_str();
