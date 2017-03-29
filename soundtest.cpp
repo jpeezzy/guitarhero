@@ -2,7 +2,7 @@
 //test if it can even play wav files
 #ifndef __linux__ 
 	#include <windows.h>
-	#include <Xinput.h>
+	#include <Xinput.h> //https://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
 	#include <WinBase.h>
 #endif
 
@@ -15,31 +15,18 @@
 #include <conio.h>
 
 using namespace std;
-
-void playwav(std::string filename); 
+void LED();
 std::map <WORD, string> getfilename();
+void playwav(std::string filename); 
+
 int main()
 {
-	_XINPUT_GAMEPAD gamepad;
-	DWORD dwResult;
-	for (DWORD i = 0; i< XUSER_MAX_COUNT; i++)
-	{
-		XINPUT_STATE state;
-		ZeroMemory(&state, sizeof(XINPUT_STATE));
-	    // Simply get the state of the controller from XInput.
-		dwResult = XInputGetState(i, &state);
-		if (dwResult == ERROR_SUCCESS)
-			cout << "Controller is connected" << endl;
-		else
-			cout << "Controller is not connected" << endl;
-	}	
-
-	XINPUT_STATE state; //declare state object from xinput_state struct
+	_XINPUT_GAMEPAD gamepad; DWORD dwResult; XINPUT_STATE state; //declare state object from xinput_state struct
 	ZeroMemory(&state, sizeof(XINPUT_STATE)); //finding memory location of zero memory
 	std::map <WORD, string> roar = getfilename();
 	WORD wammy = 0x0; 
 	while (1) {
-		 // need to implement this for more wav file functionality 
+		LED();
 		dwResult = XInputGetState(0, &state);
 		if (state.Gamepad.sThumbRX >= 0)
 			wammy = 0x0020;
@@ -52,6 +39,26 @@ int main()
 		;
 	}
 return 0;
+}
+
+void LED() {
+	_XINPUT_GAMEPAD gamepad;
+	DWORD dwResult;
+
+	XINPUT_STATE state; //declare state object from xinput_state struct
+	ZeroMemory(&state, sizeof(XINPUT_STATE)); //finding memory location of zero memory
+
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
+	{
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+		// Simply get the state of the controller from XInput.
+		dwResult = XInputGetState(i, &state);
+		//	if (dwResult == ERROR_SUCCESS)
+		//	else
+		//cout << "Controller is not connected" << endl;
+	}// need to implement this for more wav file functionality 
+
 }
 
 std::map <WORD, string> getfilename() {
