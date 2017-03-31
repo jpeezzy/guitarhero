@@ -61,12 +61,14 @@ void LED() {
 std::map <WORD, string> getfilename() {
 	std::map <WORD, string> wavfile;
 	wavfile[XINPUT_GAMEPAD_A + XINPUT_GAMEPAD_DPAD_DOWN] = "D.Wav"; //in terms of button mapping this is GREEN
-	wavfile[XINPUT_GAMEPAD_B + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; // RED
+	wavfile[XINPUT_GAMEPAD_B + XINPUT_GAMEPAD_DPAD_DOWN] = "ddouble.wav"; // RED
 	wavfile[XINPUT_GAMEPAD_X + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; // BLUE 
 	wavfile[XINPUT_GAMEPAD_Y + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; // YELLOW 
 	wavfile[XINPUT_GAMEPAD_LEFT_SHOULDER + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; //Orange doesn't have adefault. Its 0x100 or 256
 	wavfile[XINPUT_GAMEPAD_DPAD_DOWN + XINPUT_GAMEPAD_DPAD_DOWN] = ""; //down flipper ^_^
 	wavfile[XINPUT_GAMEPAD_A + XINPUT_GAMEPAD_DPAD_DOWN + 0x0020] = "D.Wav";//wammy file
+	wavfile[XINPUT_GAMEPAD_B + XINPUT_GAMEPAD_DPAD_DOWN + 0x0020] = "stop.wav";//stop
+
 	return wavfile;
 };
 
@@ -77,9 +79,22 @@ void playwav(std::string filename) {
 	HSAMPLE streamHandle;
 	HCHANNEL channel;
 	/* Initialize output device */
+	
 	BASS_Init(device, freq, BASS_DEVICE_DEFAULT, 0, NULL);
-	streamHandle = BASS_SampleLoad(false, file, 0, 0, 3, BASS_SAMPLE_MONO | BASS_SAMPLE_OVER_POS | BASS_SAMPLE_OVER_VOL);
+	streamHandle = BASS_SampleLoad(false, file, 0, 0, 1, BASS_SAMPLE_MONO | BASS_SAMPLE_OVER_POS | BASS_SAMPLE_OVER_VOL);
 	channel = BASS_SampleGetChannel(streamHandle, FALSE);
+
+	if (!filename.compare("stop.wav"))
+	{
+		BASS_Free();
+		BASS_Init(device, freq, BASS_DEVICE_DEFAULT, 0, NULL);
+		streamHandle = BASS_SampleLoad(false, file, 0, 0, 1, BASS_SAMPLE_MONO | BASS_SAMPLE_OVER_POS | BASS_SAMPLE_OVER_VOL);
+		channel = BASS_SampleGetChannel(streamHandle, FALSE);
+		BASS_ChannelPlay(channel, FALSE);
+		Sleep(1200);
+		BASS_Free();
+		return;
+			}
 	/* Once you are done with your sample you should free it, but we don't wnat to until the play sample is over, or else nothing happens */
 	BASS_ChannelPlay(channel, FALSE);
 	//place all files in same directory or else shit goes down just put all files in resouces even though you're not using anything
