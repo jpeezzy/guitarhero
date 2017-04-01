@@ -1,0 +1,6 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (joystick.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  soundtest.cpp
+soundtest.cpp(25): warning C4101: 'gamepad': unreferenced local variable
+soundtest.cpp(60): warning C4101: 'gamepad': unreferenced local variable
+  guitarhero.vcxproj -> C:\Users\tab\Documents\Visual Studio 2015\Projects\guitarhero\Debug\guitarhero.exe
+  guitarhero.vcxproj -> C:\Users\tab\Documents\Visual Studio 2015\Projects\guitarhero\Debug\guitarhero.pdb (Full PDB)
