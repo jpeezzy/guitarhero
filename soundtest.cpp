@@ -22,10 +22,11 @@ void playwav(std::string filename); //76
 //Main Loop
 int main()
 {
-	_XINPUT_GAMEPAD gamepad; DWORD dwResult; XINPUT_STATE state; //declare state object from xinput_state struct
+	_XINPUT_GAMEPAD gamepad; DWORD dwResult; DWORD  dwp1= 0x0000;
+	XINPUT_STATE state; //declare state object from xinput_state struct (get gamepad state)
 	ZeroMemory(&state, sizeof(XINPUT_STATE)); //finding memory location of zero memory
 	std::map <WORD, string> roar = getfilename();
-	WORD wammy = 0x0;
+	WORD wammy = 0x0; WORD previousconfig = 0;
 	while (1) 
 	{
 		LED();
@@ -34,10 +35,21 @@ int main()
 			wammy = 0x0020;
 		else
 			wammy = 0x0;
+
+		if (previousconfig == state.Gamepad.wButtons + wammy)
+		{
+			cout << "stays the same" << endl;
+			dwp1 = state.dwPacketNumber;
+			continue;
+		}
+		cout << "dwstatepacketnumber==" << state.dwPacketNumber << endl;
+
 		//now we have new information. Wammy bar goes from -32768 (-0x8000) to 32767 (0x8000); member SHORT sThumbRX of struct Gamepad;
 		cout << state.Gamepad.wButtons + wammy << endl;
 		Sleep(100);
+		previousconfig = state.Gamepad.wButtons + wammy;
 		playwav(roar[state.Gamepad.wButtons + wammy]);
+		
 		;
 	}
 	return 0;
@@ -45,13 +57,14 @@ int main()
 
 //Functions
 void LED() {
-	_XINPUT_GAMEPAD gamepad;
+	_XINPUT_GAMEPAD gamepad; 
 	DWORD dwResult; XINPUT_STATE state; //declare state object from xinput_state struct
 	ZeroMemory(&state, sizeof(XINPUT_STATE)); //finding memory location of zero memory
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
 	{
 		XINPUT_STATE state;
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
+
 		// Simply get the state of the controller from XInput.
 		dwResult = XInputGetState(i, &state);
 	}
