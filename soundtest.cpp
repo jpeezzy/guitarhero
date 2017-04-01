@@ -38,15 +38,15 @@ int main()
 
 		if (previousconfig == state.Gamepad.wButtons + wammy)
 		{
-			cout << "stays the same" << endl;
+			//cout << "stays the same" << endl;
 			dwp1 = state.dwPacketNumber;
 			continue;
 		}
-		cout << "dwstatepacketnumber==" << state.dwPacketNumber << endl;
+	//	cout << "dwstatepacketnumber==" << state.dwPacketNumber << endl;
 
 		//now we have new information. Wammy bar goes from -32768 (-0x8000) to 32767 (0x8000); member SHORT sThumbRX of struct Gamepad;
-		cout << state.Gamepad.wButtons + wammy << endl;
-		Sleep(100);
+		//cout << state.Gamepad.wButtons + wammy << endl;
+		Sleep(10);
 		previousconfig = state.Gamepad.wButtons + wammy;
 		playwav(roar[state.Gamepad.wButtons + wammy]);
 		
@@ -73,11 +73,11 @@ void LED() {
 
 std::map <WORD, string> getfilename() {
 	std::map <WORD, string> wavfile;
-	wavfile[XINPUT_GAMEPAD_A + XINPUT_GAMEPAD_DPAD_DOWN] = "D.Wav"; //in terms of button mapping this is GREEN
-	wavfile[XINPUT_GAMEPAD_B + XINPUT_GAMEPAD_DPAD_DOWN] = "ddouble.wav"; // RED
-	wavfile[XINPUT_GAMEPAD_X + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; // BLUE 
-	wavfile[XINPUT_GAMEPAD_Y + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; // YELLOW 
-	wavfile[XINPUT_GAMEPAD_LEFT_SHOULDER + XINPUT_GAMEPAD_DPAD_DOWN] = "D.wav"; //Orange doesn't have adefault. Its 0x100 or 256
+	wavfile[XINPUT_GAMEPAD_A + XINPUT_GAMEPAD_DPAD_DOWN] = "A.Wav"; //in terms of button mapping this is GREEN
+	wavfile[XINPUT_GAMEPAD_B + XINPUT_GAMEPAD_DPAD_DOWN] = "High_D.wav"; // RED
+	wavfile[XINPUT_GAMEPAD_X + XINPUT_GAMEPAD_DPAD_DOWN] = "HIGH_E.wav"; // BLUE 
+	wavfile[XINPUT_GAMEPAD_Y + XINPUT_GAMEPAD_DPAD_DOWN] = "F#_LOW.wav"; // YELLOW 
+	wavfile[XINPUT_GAMEPAD_LEFT_SHOULDER + XINPUT_GAMEPAD_DPAD_DOWN] = "F#.wav"; //Orange doesn't have adefault. Its 0x100 or 256
 	wavfile[XINPUT_GAMEPAD_DPAD_DOWN + XINPUT_GAMEPAD_DPAD_DOWN] = ""; //down flipper ^_^
 	wavfile[XINPUT_GAMEPAD_A + XINPUT_GAMEPAD_DPAD_DOWN + 0x0020] = "D.Wav";//wammy file
 	wavfile[XINPUT_GAMEPAD_B + XINPUT_GAMEPAD_DPAD_DOWN + 0x0020] = "stop.wav";//stop
@@ -104,7 +104,7 @@ void playwav(std::string filename) {
 		streamHandle = BASS_SampleLoad(false, file, 0, 0, 1, BASS_SAMPLE_MONO | BASS_SAMPLE_OVER_POS | BASS_SAMPLE_OVER_VOL);
 		channel = BASS_SampleGetChannel(streamHandle, FALSE);
 		BASS_ChannelPlay(channel, FALSE);
-		Sleep(1200);
+		Sleep(1000);
 		BASS_Free();
 		return;
 			}
